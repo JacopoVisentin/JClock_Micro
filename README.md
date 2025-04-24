@@ -1,6 +1,6 @@
 # JClock Micro
 
-An LED clock, indpired by TIX design, built with an ESP8266 microcontroller.
+An LED clock, indpired by TIX design, built with an ESP8266 microcontroller and an LED strip.
 
 ## Features
 
@@ -35,7 +35,7 @@ An LED clock, indpired by TIX design, built with an ESP8266 microcontroller.
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/<your-username>/JClock_Micro.git
+   git clone https://github.com/<JacopoVisentin>/JClock_Micro.git
    cd JClock_Micro
    ```
 
