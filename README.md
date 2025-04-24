@@ -35,7 +35,7 @@ An LED clock, indpired by TIX design, built with an ESP8266 microcontroller and 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/<JacopoVisentin>/JClock_Micro.git
+   git clone https://github.com/JacopoVisentin/JClock_Micro.git
    cd JClock_Micro
    ```
 
@@ -78,13 +78,14 @@ An LED clock, indpired by TIX design, built with an ESP8266 microcontroller and 
 ## Project Structure
 
 ```bash
-JClock_Micro.ino       // Main application
-clock_display.hpp      // ClockDisplay class interface
-clock_display.cpp      // ClockDisplay class implementation
-clock_leds.hpp         // LED mapping definitions
-clock_leds.cpp         // LED mapping implementation
-utils.hpp              // Utility functions declarations
-utils.cpp              // Utility functions implementations (NTP, time conversion, system utils)
+/JClock_Micro/
+├── JClock_Micro.ino       // Main application
+├── clock_display.hpp      // ClockDisplay class interface
+├── clock_display.cpp      // ClockDisplay class implementation
+├── clock_leds.hpp         // LED mapping definitions
+├── clock_leds.cpp         // LED mapping implementation
+├── utils.hpp              // Utility functions declarations
+└── utils.cpp              // Utility functions implementations (NTP, time conversion, system utils)
 ```
 
 ## Contributing
