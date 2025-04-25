@@ -45,11 +45,6 @@ void loop() {
   int my_colour = makeColor(235, 149, 61);
 
   showLeds(on, my_colour);
-
-  //clearTerminal();
-  //my_clock.showClockInConsole();
-  //my_clock.printLedIndices();
-  //my_clock.printTime();
-
+  
   sleepSeconds(5);
 }

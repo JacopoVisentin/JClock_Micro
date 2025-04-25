@@ -85,7 +85,7 @@ void ClockDisplay::setMinuteFirstArray() {
         this->minute_first_array[i][j] = 1;
     }
 }
-void ClockDisplay::setMinuteScondArray() {
+void ClockDisplay::setMinuteSecondArray() {
     int m2 = this->minute_second_digit;
     coords_array_t coords_array = generateNCoords(m2, 2, 2);
     this->minute_second_coords = coords_array;
@@ -99,7 +99,7 @@ void ClockDisplay::setAllArrays() {
     this->setHourFirstArray();
     this->setHourSecondArray();
     this->setMinuteFirstArray();
-    this->setMinuteScondArray();
+    this->setMinuteSecondArray();
 }
 void ClockDisplay::refresh() {
     // TODO

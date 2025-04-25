@@ -56,7 +56,7 @@ public:
     void setHourFirstArray();
     void setHourSecondArray();
     void setMinuteFirstArray();
-    void setMinuteScondArray();
+    void setMinuteSecondArray();
 
     // setting led arrays
     void setAllArrays();
