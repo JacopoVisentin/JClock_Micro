@@ -1,9 +1,7 @@
-#include <sys/_stdint.h>
-#include "c_types.h"
-#pragma once
+#include <Arduino.h>
 #include <vector>
-#include <utility>
-#include <string>      // for std::to_string in utils
+#pragma once
+
 
 enum DigitId : int{
     H1 = 0,

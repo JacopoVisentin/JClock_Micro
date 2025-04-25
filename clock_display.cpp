@@ -1,9 +1,4 @@
-#include "WString.h"
-#include "HardwareSerial.h"
 #include <Arduino.h>
-#include <vector>
-#include <utility>
-#include <string>      // for std::to_string in utils
 #include "clock_display.hpp"
 #include "utils.hpp"
 #include "clock_leds.hpp"

@@ -1,10 +1,8 @@
-#include <sys/_timeval.h>
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <NTPClient.h>
-#include "HardwareSerial.h"
-#include "core_esp8266_features.h"
+#include <string>
 #include <TimeLib.h>     // from “Time” library
 #include <Timezone.h>    // from “Timezone” library
 #include "utils.hpp"

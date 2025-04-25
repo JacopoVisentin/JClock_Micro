@@ -1,9 +1,6 @@
-#include <sys/_stdint.h>
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h> // led library
 #include <vector>
-#include <utility>
-#include <string>      // for std::to_string in utils
 #include "clock_leds.hpp"
 
 /*
