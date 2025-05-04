@@ -10,8 +10,8 @@
 */
 
 // WIFI
-constexpr char* SSID = "Proximus-Home-DEB8";
-constexpr char* PASS = "007007007";
+constexpr const char* SSID = "Proximus-Home-DEB8";
+constexpr const char* PASS = "007007007";
 
 // DISPLAY
 constexpr int LED_BRIGHTNESS = 50; // /256

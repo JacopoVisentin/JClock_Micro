@@ -1,3 +1,4 @@
+#include "utils.hpp"
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h> // led library
 #include <vector>
@@ -22,7 +23,6 @@ const LedMapEntry ledMap[] = {
     {M2, 2, 0, 11}, {M2, 2, 1, 12}, {M2, 2, 2, 35},
 };
 
-const size_t ledMapSize = sizeof(ledMap) / sizeof(ledMap[0]);
 
 int getLedIndex(DigitId digit, int row, int column) {
     for (const LedMapEntry &entry : ledMap) {
@@ -39,10 +39,9 @@ int getLedIndex(DigitId digit, int row, int column) {
 */
 
 #define PIN        D4
-#define NUMPIXELS  36
 
 // creating the led strip object
-static Adafruit_NeoPixel strip(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel strip(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
 void initLedStrip() {
     strip.begin();
@@ -60,14 +59,37 @@ void setLedBrightness(int brightness) {
 uint32_t makeColor(uint8_t r, uint8_t g, uint8_t b) {
     return strip.Color(r, g, b);
 }
-void showLeds(std::vector<int> on_indices, int colour) {
-    strip.clear();
-    for(int index : on_indices) {
-        if(index >= 0 && index < NUMPIXELS) {
-            strip.setPixelColor(index, colour);
-        }
-        strip.show();
+void showLeds(const std::vector<int> on_indices, int colour, LedAnimation anim) {
+    switch (anim) {
+        case LedAnimation::Warmup: AnimationWarmup(colour); break;
+        case LedAnimation::Test_LEDs: AnimationTestLEDs(); break;
+        case LedAnimation::Default: AnimationDefault(on_indices, colour); break;
+        case LedAnimation::Fade_io: AnimationFadeIO(on_indices, colour); break;
+        default: AnimationDefault(on_indices, colour); break;
     }
 }
 
-
+// various animation functions
+void AnimationWarmup(int colour) { // turn on all leds for 2s before showing time
+    strip.clear();
+    for(int index = 0; index < NUM_LEDS; index++) {
+        strip.setPixelColor(index, colour);
+    }
+    strip.show();
+    sleepSeconds(2);
+    clearLedStrip();
+    sleepSeconds(1);
+}
+void AnimationTestLEDs() {
+}
+void AnimationDefault(const std::vector<int> on_indices, int colour) {
+    strip.clear();
+    for(int index : on_indices) {
+        if(index >= 0 && index < NUM_LEDS) {
+            strip.setPixelColor(index, colour);
+        }
+    }
+    strip.show();
+}
+void AnimationFadeIO(const std::vector<int> on_indices, int colour) {
+}
