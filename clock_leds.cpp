@@ -45,6 +45,7 @@ int getLedIndex(DigitId digit, int row, int column) {
 // creating the led strip object
 static Adafruit_NeoPixel strip(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
+// strip setup
 void initLedStrip() {
     strip.begin();
     strip.setBrightness(128);  // default mid-level

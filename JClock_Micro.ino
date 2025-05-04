@@ -8,8 +8,11 @@
 * RUNNING PARAMETERS
 */
 
-// uncomment for led colour testing mode
-//#define LED_TEST
+// uncomment for testing modes
+#define CONSOLE_DISPLAY
+//#define RGB_TEST
+#define WARMUP_TEST
+
 
 
 // WIFI
@@ -25,6 +28,7 @@ const int my_colour = makeColor(RGB[0], RGB[1], RGB[2]);
 ClockDisplay my_clock;
 
 void setup() {
+
   Serial.begin(115200);
   while (!Serial) {} // waiting for serial if needed
 
@@ -43,10 +47,13 @@ void setup() {
   initLedStrip();
   setLedBrightness(LED_BRIGHTNESS);
 
+  // TESTS
   // led check at startup
-  AnimationWarmup(my_colour);
-
-  #ifdef LED_TEST
+  #ifdef WARMUP_TEST
+    AnimationWarmup(my_colour);
+  #endif
+  // rgb test
+  #ifdef RGB_TEST
     AnimationTestLEDs();
   #endif
 }
@@ -55,10 +62,19 @@ void loop() {
   my_clock.machineTimeInput(); // using NTPClient
   my_clock.refresh();
 
+
+  // displaying clock in console for debugging
+  #ifdef CONSOLE_DISPLAY
+    my_clock.showClockInConsole();
+    my_clock.printTime();
+    my_clock.printLedIndices();
+    clearTerminal();
+  #endif
+
+
   // vector of led indices on
   auto on_indices = my_clock.getActiveLedIndices();
 
   showLeds(on_indices, my_colour, LedAnimation::Fade_io, LED_REFRESH_TIME);
-  
-  //sleepSeconds(LED_REFRESH_TIME);
+
 }
