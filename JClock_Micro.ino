@@ -4,10 +4,13 @@
 #include "clock_leds.hpp"
 #include "utils.hpp"
 
-
 /*
 * RUNNING PARAMETERS
 */
+
+// uncomment for led colour testing mode
+//#define LED_TEST
+
 
 // WIFI
 constexpr const char* SSID = "Proximus-Home-DEB8";
@@ -16,8 +19,8 @@ constexpr const char* PASS = "007007007";
 // DISPLAY
 constexpr int LED_BRIGHTNESS = 50; // /256
 constexpr int LED_REFRESH_TIME = 5; // seconds
-
-
+constexpr uint8_t RGB[3] = {235, 149, 61};
+const int my_colour = makeColor(RGB[0], RGB[1], RGB[2]);
 
 ClockDisplay my_clock;
 
@@ -39,6 +42,13 @@ void setup() {
   // LED strip setup
   initLedStrip();
   setLedBrightness(LED_BRIGHTNESS);
+
+  // led check at startup
+  AnimationWarmup(my_colour);
+
+  #ifdef LED_TEST
+    AnimationTestLEDs();
+  #endif
 }
 
 void loop() {
@@ -46,10 +56,9 @@ void loop() {
   my_clock.refresh();
 
   // vector of led indices on
-  auto on = my_clock.getActiveLedIndices();
+  auto on_indices = my_clock.getActiveLedIndices();
 
-  int my_colour = makeColor(235, 149, 61);
-  showLeds(on, my_colour);
+  showLeds(on_indices, my_colour, LedAnimation::Fade_io, LED_REFRESH_TIME);
   
-  sleepSeconds(LED_REFRESH_TIME);
+  //sleepSeconds(LED_REFRESH_TIME);
 }

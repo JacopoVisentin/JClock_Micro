@@ -1,3 +1,5 @@
+#include <sys/_stdint.h>
+#include "core_esp8266_features.h"
 #include "utils.hpp"
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h> // led library
@@ -59,13 +61,11 @@ void setLedBrightness(int brightness) {
 uint32_t makeColor(uint8_t r, uint8_t g, uint8_t b) {
     return strip.Color(r, g, b);
 }
-void showLeds(const std::vector<int> on_indices, int colour, LedAnimation anim) {
+void showLeds(const std::vector<int> on_indices, int colour, LedAnimation anim, int refresh_time) {
     switch (anim) {
-        case LedAnimation::Warmup: AnimationWarmup(colour); break;
-        case LedAnimation::Test_LEDs: AnimationTestLEDs(); break;
-        case LedAnimation::Default: AnimationDefault(on_indices, colour); break;
-        case LedAnimation::Fade_io: AnimationFadeIO(on_indices, colour); break;
-        default: AnimationDefault(on_indices, colour); break;
+        case LedAnimation::Default: AnimationDefault(on_indices, colour, refresh_time); break;
+        case LedAnimation::Fade_io: AnimationFadeIO(on_indices, colour, refresh_time); break;
+        default: AnimationDefault(on_indices, colour, refresh_time); break;
     }
 }
 
@@ -80,9 +80,27 @@ void AnimationWarmup(int colour) { // turn on all leds for 2s before showing tim
     clearLedStrip();
     sleepSeconds(1);
 }
-void AnimationTestLEDs() {
+void AnimationTestLEDs() { // cycle rgb for testing individual pixels
+    while(true) {
+        
+        strip.clear();
+        
+        const uint32_t red = strip.Color(255, 0, 0);
+        const uint32_t green = strip.Color(0, 255, 0);
+        const uint32_t blue = strip.Color(0, 0, 255);
+        const uint32_t colours[3] = {red, green, blue};
+        
+        for(const uint32_t colour : colours) {
+            for(int index = 0; index < NUM_LEDS; index++) {
+                strip.setPixelColor(index, colour);
+            }
+            strip.show();
+            delay(1500);
+            strip.clear();
+        }
+    }
 }
-void AnimationDefault(const std::vector<int> on_indices, int colour) {
+void AnimationDefault(const std::vector<int> on_indices, int colour, int refresh_time) {
     strip.clear();
     for(int index : on_indices) {
         if(index >= 0 && index < NUM_LEDS) {
@@ -90,6 +108,48 @@ void AnimationDefault(const std::vector<int> on_indices, int colour) {
         }
     }
     strip.show();
+    sleepSeconds(refresh_time);
 }
-void AnimationFadeIO(const std::vector<int> on_indices, int colour) {
+void AnimationFadeIO(const std::vector<int> on_indices, int colour, int refresh_time) {
+    strip.clear();
+
+    // parameters
+    const uint8_t steps = 40;
+    const uint16_t pause_ms = 20;
+    
+    const int fade_time_ms = 2*steps*pause_ms;
+    const int hold_time_ms = (1000*refresh_time) - fade_time_ms;
+
+    // 1) Extract R, G, B from your 24-bit colour
+    uint8_t r = (colour >> 16) & 0xFF;
+    uint8_t g = (colour >> 8 ) & 0xFF;
+    uint8_t b =  colour        & 0xFF;
+
+    // 2) Fade IN
+    for (uint8_t s = 0; s <= steps; ++s) {
+        float frac = (float)s / steps;
+        strip.clear();
+        for (int idx : on_indices) {
+            if (idx < 0 || idx >= NUM_LEDS) continue;
+            // scale each channel by frac
+            strip.setPixelColor(idx, strip.Color(r * frac, g * frac, b * frac));
+        }
+        strip.show();
+        delay(pause_ms);
+    }
+
+    // 3) hold at full brightness
+    delay(1000*refresh_time);
+
+    // 4) Fade OUT
+    for (int s = steps; s >= 0; --s) {
+        float frac = (float)s / steps;
+        strip.clear();
+        for (int idx : on_indices) {
+            if (idx < 0 || idx >= NUM_LEDS) continue;
+            strip.setPixelColor(idx, strip.Color(r * frac, g * frac, b * frac));
+        }
+        strip.show();
+        delay(pause_ms);
+    }
 }

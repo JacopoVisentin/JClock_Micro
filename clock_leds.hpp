@@ -34,8 +34,6 @@ int getLedIndex(DigitId digit, int row, int col);
 static constexpr int NUM_LEDS = 36; // strip length (including dead leds for spacing)
 
 enum class LedAnimation {
-    Warmup, // use at startup for quick check
-    Test_LEDs, // all leds on and pulsating for prolonged test
     Default, // no animation
     Fade_io
 };
@@ -49,10 +47,10 @@ uint32_t makeColor(uint8_t r, uint8_t g, uint8_t b);
 void testStrip();
 
 // wrapper function for calling custom animations
-void showLeds(const std::vector<int> on_indices, int color, LedAnimation anim = LedAnimation::Default);
+void showLeds(const std::vector<int> on_indices, int color, LedAnimation anim, int refresh_time);
 
 // custom animations
 void AnimationWarmup(int colour);
 void AnimationTestLEDs();
-void AnimationDefault(const std::vector<int> on_indices, int colour);
-void AnimationFadeIO(const std::vector<int> on_indices, int colour);
+void AnimationDefault(const std::vector<int> on_indices, int colour, int refresh_time);
+void AnimationFadeIO(const std::vector<int> on_indices, int colour, int refresh_time);
