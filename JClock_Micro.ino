@@ -8,8 +8,14 @@
 /*
 * RUNNING PARAMETERS
 */
-const char* SSID = "Proximus-Home-DEB8";
-const char* PASS = "007007007";
+
+// WIFI
+constexpr char* SSID = "Proximus-Home-DEB8";
+constexpr char* PASS = "007007007";
+
+// DISPLAY
+constexpr int LED_BRIGHTNESS = 50; // /256
+constexpr int LED_REFRESH_TIME = 5; // seconds
 
 
 
@@ -30,8 +36,9 @@ void setup() {
 
   initTimeClient(); // must call after wifi is up
 
+  // LED strip setup
   initLedStrip();
-  setLedBrightness(50); // out of 256
+  setLedBrightness(LED_BRIGHTNESS);
 }
 
 void loop() {
@@ -41,10 +48,8 @@ void loop() {
   // vector of led indices on
   auto on = my_clock.getActiveLedIndices();
 
-  // choose colour
   int my_colour = makeColor(235, 149, 61);
-
   showLeds(on, my_colour);
   
-  sleepSeconds(5);
+  sleepSeconds(LED_REFRESH_TIME);
 }
